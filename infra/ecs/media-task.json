@@ -1,0 +1,41 @@
+{
+  "family": "veo3-media",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "2048",
+  "taskRoleArn": "arn:aws:iam::ACCOUNT_ID:role/veo3-ecs-task-role",
+  "executionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/veo3-ecs-execution-role",
+  "containerDefinitions": [
+    {
+      "name": "media",
+      "image": "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/veo3-media:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 3001,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        { "name": "NODE_ENV", "value": "production" }
+      ],
+      "secrets": [
+        { "name": "MEDIA_SERVICE_SECRET", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:veo3/MEDIA_SERVICE_SECRET" },
+        { "name": "REDIS_URL", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:veo3/REDIS_URL" },
+        { "name": "GOOGLE_CLOUD_PROJECT", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:veo3/GOOGLE_CLOUD_PROJECT" },
+        { "name": "ANTHROPIC_API_KEY", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:veo3/ANTHROPIC_API_KEY" },
+        { "name": "KLING_API_KEY", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:veo3/KLING_API_KEY" },
+        { "name": "VLLM_BASE_URL", "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:veo3/VLLM_BASE_URL" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/veo3-media",
+          "awslogs-region": "REGION",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
