@@ -78,23 +78,34 @@ async def list_projects(
     status_filter: str | None = Query(default=None, alias="status"),
 ) -> PaginatedProjectsResponse:
     offset = (page - 1) * page_size
-    where = "WHERE user_id = :user_id"
-    params: dict = {"user_id": current_user.user_id, "limit": page_size, "offset": offset}
 
+    # Use explicit static queries — no dynamic column name interpolation
     if status_filter:
-        where += " AND status = :status"
-        params["status"] = status_filter
+        count_result = await db.execute(
+            text("SELECT COUNT(*) FROM projects WHERE user_id = :user_id AND status = :status"),
+            {"user_id": current_user.user_id, "status": status_filter},
+        )
+        rows_result = await db.execute(
+            text(
+                "SELECT * FROM projects WHERE user_id = :user_id AND status = :status"
+                " ORDER BY created_at DESC LIMIT :limit OFFSET :offset"
+            ),
+            {"user_id": current_user.user_id, "status": status_filter, "limit": page_size, "offset": offset},
+        )
+    else:
+        count_result = await db.execute(
+            text("SELECT COUNT(*) FROM projects WHERE user_id = :user_id"),
+            {"user_id": current_user.user_id},
+        )
+        rows_result = await db.execute(
+            text(
+                "SELECT * FROM projects WHERE user_id = :user_id"
+                " ORDER BY created_at DESC LIMIT :limit OFFSET :offset"
+            ),
+            {"user_id": current_user.user_id, "limit": page_size, "offset": offset},
+        )
 
-    count_result = await db.execute(
-        text(f"SELECT COUNT(*) FROM projects {where}"),
-        params,
-    )
     total = count_result.scalar() or 0
-
-    rows_result = await db.execute(
-        text(f"SELECT * FROM projects {where} ORDER BY created_at DESC LIMIT :limit OFFSET :offset"),
-        params,
-    )
     rows = rows_result.mappings().all()
 
     return PaginatedProjectsResponse(
@@ -144,12 +155,20 @@ async def update_project(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No fields to update")
 
     now = datetime.now(timezone.utc)
-    updates["updated_at"] = now
-    set_clause = ", ".join(f"{k} = :{k}" for k in updates)
+
+    # Build SET clause from explicit allowlist — column names never come from user input
+    _ALLOWED_UPDATE_COLUMNS: frozenset[str] = frozenset({"name", "description", "status"})
+    if unknown := set(updates) - _ALLOWED_UPDATE_COLUMNS:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Unknown fields: {unknown}")
+
+    # All column names are from the allowlist above; values are parameterized
+    set_parts = [f"{col} = :{col}" for col in sorted(updates)]
+    set_parts.append("updated_at = :updated_at")
+    set_clause = ", ".join(set_parts)
 
     await db.execute(
         text(f"UPDATE projects SET {set_clause} WHERE id = :id AND user_id = :user_id"),
-        {**updates, "id": str(project_id), "user_id": current_user.user_id},
+        {**updates, "updated_at": now, "id": str(project_id), "user_id": current_user.user_id},
     )
 
     await db.execute(

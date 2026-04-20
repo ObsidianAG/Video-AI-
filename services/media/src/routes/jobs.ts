@@ -97,9 +97,10 @@ async function executeJobAsync(
         seed?: number;
         provider_params?: Record<string, unknown>;
       };
+      const rawImageUrl = p.image_url ?? p.imageUrl;
       result = await provider.generateVideo({
         prompt: p.prompt ?? "",
-        ...(p.image_url !== undefined ? { imageUrl: p.image_url } : p.imageUrl !== undefined ? { imageUrl: p.imageUrl } : {}),
+        ...(rawImageUrl !== undefined ? { imageUrl: rawImageUrl } : {}),
         durationSeconds: p.duration_seconds ?? p.durationSeconds ?? 5,
         aspectRatio: p.aspect_ratio ?? p.aspectRatio ?? "16:9",
         ...(p.fps !== undefined ? { fps: p.fps } : {}),

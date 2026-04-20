@@ -141,14 +141,26 @@ async def transition_job_state(
     if output_asset_id:
         extra_fields["output_asset_id"] = output_asset_id
 
-    set_clause = ", ".join(f"{k} = :{k}" for k in extra_fields)
-    if set_clause:
-        set_clause = ", " + set_clause
+    # Explicit allowlist of columns that can be updated by state transitions.
+    # Keys are never derived from external input — they are set exclusively by code above.
+    _ALLOWED_EXTRA_COLUMNS: frozenset[str] = frozenset({
+        "started_at",
+        "completed_at",
+        "error_code",
+        "error_message",
+        "provider_operation_id",
+        "output_asset_id",
+    })
+    if unknown := set(extra_fields) - _ALLOWED_EXTRA_COLUMNS:
+        raise RuntimeError(f"transition_job_state: unexpected column(s) in extra_fields: {unknown}")
+
+    # Build SET clause from verified allowlist; all values are parameterized
+    extra_set = (", " + ", ".join(f"{col} = :{col}" for col in sorted(extra_fields))) if extra_fields else ""
 
     result = await db.execute(
         text(f"""
             UPDATE jobs
-            SET state = :to_state, updated_at = :now {set_clause}
+            SET state = :to_state, updated_at = :now{extra_set}
             WHERE id = :job_id AND state = :from_state
             RETURNING *
         """),

@@ -31,14 +31,14 @@ variable "project" {
 }
 
 module "s3_assets" {
-  source      = "../modules/s3"
+  source      = "../../modules/s3"
   bucket_name = "${var.project}-assets-${var.environment}"
   environment = var.environment
   project     = var.project
 }
 
 module "elasticache_redis" {
-  source          = "../modules/elasticache"
+  source          = "../../modules/elasticache"
   cluster_id      = "${var.project}-redis-${var.environment}"
   node_type       = "cache.r7g.large"
   num_cache_nodes = 1
@@ -47,7 +47,7 @@ module "elasticache_redis" {
 }
 
 module "waf" {
-  source      = "../modules/waf"
+  source      = "../../modules/waf"
   name        = "${var.project}-waf-${var.environment}"
   environment = var.environment
   project     = var.project

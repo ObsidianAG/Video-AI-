@@ -85,23 +85,44 @@ async def list_jobs(
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=20, ge=1, le=100),
 ) -> PaginatedJobsResponse:
-    where = "WHERE user_id = :user_id"
-    params: dict = {"user_id": current_user.user_id, "limit": page_size, "offset": (page - 1) * page_size}
+    offset = (page - 1) * page_size
 
-    if project_id:
-        where += " AND project_id = :project_id"
-        params["project_id"] = str(project_id)
-    if state:
-        where += " AND state = :state"
-        params["state"] = state
+    # Use explicit static queries — no dynamic column interpolation
+    if project_id and state:
+        count_q = text(
+            "SELECT COUNT(*) FROM jobs WHERE user_id = :uid AND project_id = :pid AND state = :state"
+        )
+        rows_q = text(
+            "SELECT * FROM jobs WHERE user_id = :uid AND project_id = :pid AND state = :state"
+            " ORDER BY created_at DESC LIMIT :limit OFFSET :offset"
+        )
+        base_params: dict = {"uid": current_user.user_id, "pid": str(project_id), "state": state}
+    elif project_id:
+        count_q = text("SELECT COUNT(*) FROM jobs WHERE user_id = :uid AND project_id = :pid")
+        rows_q = text(
+            "SELECT * FROM jobs WHERE user_id = :uid AND project_id = :pid"
+            " ORDER BY created_at DESC LIMIT :limit OFFSET :offset"
+        )
+        base_params = {"uid": current_user.user_id, "pid": str(project_id)}
+    elif state:
+        count_q = text("SELECT COUNT(*) FROM jobs WHERE user_id = :uid AND state = :state")
+        rows_q = text(
+            "SELECT * FROM jobs WHERE user_id = :uid AND state = :state"
+            " ORDER BY created_at DESC LIMIT :limit OFFSET :offset"
+        )
+        base_params = {"uid": current_user.user_id, "state": state}
+    else:
+        count_q = text("SELECT COUNT(*) FROM jobs WHERE user_id = :uid")
+        rows_q = text(
+            "SELECT * FROM jobs WHERE user_id = :uid"
+            " ORDER BY created_at DESC LIMIT :limit OFFSET :offset"
+        )
+        base_params = {"uid": current_user.user_id}
 
-    count_result = await db.execute(text(f"SELECT COUNT(*) FROM jobs {where}"), params)
+    count_result = await db.execute(count_q, base_params)
     total = count_result.scalar() or 0
 
-    rows_result = await db.execute(
-        text(f"SELECT * FROM jobs {where} ORDER BY created_at DESC LIMIT :limit OFFSET :offset"),
-        params,
-    )
+    rows_result = await db.execute(rows_q, {**base_params, "limit": page_size, "offset": offset})
     rows = rows_result.mappings().all()
 
     return PaginatedJobsResponse(
