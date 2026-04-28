@@ -36,12 +36,13 @@ async def login(
         )
 
     token = create_access_token(str(row["id"]), row["email"])
+    cookie_secure = request.url.scheme == "https"
 
     response.set_cookie(
         key="access_token",
         value=token,
         httponly=True,
-        secure=True,
+        secure=cookie_secure,
         samesite="lax",
         max_age=3600,
     )
