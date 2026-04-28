@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "noEmit": false,
+    "paths": {
+      "@video-ai/core": ["../core/dist/index.d.ts"],
+      "@video-ai/core/*": ["../core/dist/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts"]
+}
