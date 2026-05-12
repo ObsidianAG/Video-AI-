@@ -14,6 +14,7 @@
     "build": "pnpm -r --workspace-concurrency=1 run build",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "audit:no-mocks": "node scripts/audit-no-mocks.mjs",
     "proof": "node scripts/proof/run.mjs"
   },
   "devDependencies": {
