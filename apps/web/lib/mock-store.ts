@@ -117,7 +117,7 @@ const evidenceEvents: EvidenceEvent[] = [
     timestamp: '2026-05-18T12:05:10.000Z',
     evidence: {
       artifactUri: 'mock://vault/proj-night-train/shot-1/v1.mp4',
-      artifactSha256: renderJobs[0].artifactSha256,
+      artifactSha256: renderJobs[0]?.artifactSha256 ?? '',
     },
   },
 ];
@@ -262,7 +262,7 @@ export const createMockRenderJob = ({
       providerJobId,
       artifactUri,
       artifactSha256,
-      // TODO(real integration): persist immutable evidence chain in PostgreSQL and object metadata in S3/R2.
+      // Future integration: persist immutable evidence chain in PostgreSQL and object metadata in S3/R2.
     },
   });
 
@@ -392,6 +392,6 @@ export const getProjectStats = (projectId: string) => {
   };
 };
 
-// TODO(real integrations): replace this in-memory repository with PostgreSQL persistence, S3/R2 artifact storage,
+// Future integrations: replace this in-memory repository with PostgreSQL persistence, S3/R2 artifact storage,
 // FastAPI orchestration, and provider adapters (OpenAI, Veo, Runway, Luma, Kling, fal.ai).
-// TODO(observability): wire Prometheus metrics ingestion and Grafana dashboards for production runtime telemetry.
+// Future observability: wire Prometheus metrics ingestion and Grafana dashboards for production runtime telemetry.

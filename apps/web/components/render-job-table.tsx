@@ -16,10 +16,15 @@ export function RenderJobTable({ jobs, interactive = false }: { jobs: RenderJob[
 
   const mutate = async (id: string, action: 'approve' | 'reject') => {
     const endpoint = action === 'approve' ? `/api/render-jobs/${id}/approve` : `/api/render-jobs/${id}/reject`;
-    const response = await fetch(endpoint, {
+    const init: RequestInit = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: action === 'reject' ? JSON.stringify({ reason: 'Needs revision for continuity consistency.' }) : undefined,
+    };
+    if (action === 'reject') {
+      init.body = JSON.stringify({ reason: 'Needs revision for continuity consistency.' });
+    }
+    const response = await fetch(endpoint, {
+      ...init,
     });
 
     if (!response.ok) {

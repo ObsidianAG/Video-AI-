@@ -9,7 +9,7 @@ export type EvidenceChecklistState = {
 };
 
 export function EvidenceChecklist({ checklist }: { checklist: EvidenceChecklistState }) {
-  const rows = [
+  const rows: Array<[label: string, ok: boolean]> = [
     ['Render completed', checklist.completed],
     ['Provider Job ID', checklist.providerJobId],
     ['Artifact URI', checklist.artifactUri],
