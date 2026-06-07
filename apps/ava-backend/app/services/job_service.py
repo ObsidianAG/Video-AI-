@@ -132,24 +132,31 @@ async def advance_state(
 
     Validates the transition against the state machine *before* writing.
     Raises ``ValueError`` if the transition is not permitted.
-    All DB writes occur inside a single transaction.
+    All DB reads and writes occur inside a single transaction; the row is
+    locked with ``SELECT … FOR UPDATE`` so concurrent workers cannot race past
+    the terminal-state guard or produce duplicate state-history entries.
     """
     job_uuid = uuid.UUID(job_id)
-    row = await conn.fetchrow(
-        "SELECT id, state FROM video_jobs WHERE id = $1",
-        job_uuid,
-    )
-    if row is None:
-        raise ValueError(f"Job not found: {job_id!r}")
-
-    current_state: str = row["state"]
-    if current_state in TERMINAL_STATES:
-        raise ValueError(f"Job {job_id!r} is already in terminal state {current_state!r}")
-
-    if not can_transition(current_state, to_state):
-        raise ValueError(f"Transition {current_state!r} → {to_state!r} is not permitted")
 
     async with conn.transaction():
+        # Lock the row for the duration of this transaction so that concurrent
+        # calls for the same job are serialized.  Without the lock a second
+        # worker can read the pre-update state, pass the state-machine checks,
+        # and overwrite a terminal state written by the first worker.
+        row = await conn.fetchrow(
+            "SELECT id, state FROM video_jobs WHERE id = $1 FOR UPDATE",
+            job_uuid,
+        )
+        if row is None:
+            raise ValueError(f"Job not found: {job_id!r}")
+
+        current_state: str = row["state"]
+        if current_state in TERMINAL_STATES:
+            raise ValueError(f"Job {job_id!r} is already in terminal state {current_state!r}")
+
+        if not can_transition(current_state, to_state):
+            raise ValueError(f"Transition {current_state!r} → {to_state!r} is not permitted")
+
         updated = await conn.fetchrow(
             """
             UPDATE video_jobs
