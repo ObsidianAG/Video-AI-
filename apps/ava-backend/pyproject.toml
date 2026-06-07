@@ -1,0 +1,38 @@
+[project]
+name = "ava-backend"
+version = "0.1.0"
+description = "AVA production FastAPI backend for structured storyboard generation and artifact verification"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi",
+  "uvicorn[standard]",
+  "pydantic",
+  "pydantic-settings",
+  "openai",
+  "python-multipart",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "httpx",
+  "ruff",
+  "black",
+  "mypy",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
