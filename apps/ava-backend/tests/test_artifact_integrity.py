@@ -83,17 +83,17 @@ def test_valid_mp4_returns_artifact_bytes_verified(monkeypatch: MonkeyPatch) -> 
     assert result.sha256 is not None
 
 
-def test_deepfake_verified_is_always_false() -> None:
+def test_deepfake_verified_is_always_false(monkeypatch: MonkeyPatch) -> None:
     verifier = ArtifactIntegrityVerifier(_settings(min_bytes=8, max_bytes=64))
-    verifier._ffprobe_has_video_stream = _has_video_stream  # type: ignore[method-assign]
+    monkeypatch.setattr(verifier, "_ffprobe_has_video_stream", _has_video_stream)
     valid_like_mp4 = b"\x00\x00\x00\x18ftypisom1234567890"
     result = asyncio.run(verifier.verify_upload(_upload(valid_like_mp4)))
     assert result.deepfake_verified is False
 
 
-def test_result_never_reports_ready_for_user() -> None:
+def test_result_never_reports_ready_for_user(monkeypatch: MonkeyPatch) -> None:
     verifier = ArtifactIntegrityVerifier(_settings(min_bytes=8, max_bytes=64))
-    verifier._ffprobe_has_video_stream = _no_video_stream  # type: ignore[method-assign]
+    monkeypatch.setattr(verifier, "_ffprobe_has_video_stream", _no_video_stream)
     valid_like_mp4 = b"\x00\x00\x00\x18ftypisom1234567890"
     result = asyncio.run(verifier.verify_upload(_upload(valid_like_mp4)))
     assert result.next_state != JobState.READY_FOR_USER

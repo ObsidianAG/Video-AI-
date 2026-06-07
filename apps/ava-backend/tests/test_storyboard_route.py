@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from fastapi.testclient import TestClient
 
 from app.main import create_app
+from app.openai_service import OpenAIServiceError
 from app.routes.storyboard import get_storyboard_service
 from app.schemas import Scene, StoryboardPlan, StoryboardRequest
 
@@ -30,7 +31,7 @@ class OkService:
 @dataclass
 class FailService:
     async def create_storyboard(self, request: StoryboardRequest) -> StoryboardPlan:
-        raise RuntimeError("provider down")
+        raise OpenAIServiceError("provider down")
 
 
 def _payload() -> dict[str, object]:
@@ -76,7 +77,7 @@ def test_openai_failure_returns_502_fail_closed() -> None:
 def test_malformed_output_path_returns_502() -> None:
     class MalformedService:
         async def create_storyboard(self, request: StoryboardRequest) -> StoryboardPlan:
-            raise ValueError("malformed")
+            raise OpenAIServiceError("malformed")
 
     app = create_app()
     app.dependency_overrides[get_storyboard_service] = lambda: MalformedService()
