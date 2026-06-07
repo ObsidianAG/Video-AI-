@@ -36,3 +36,8 @@ def test_illegal_transitions_throw(current: JobState, next_state: JobState) -> N
 def test_completed_by_provider_cannot_transition_directly_to_ready_for_user() -> None:
     with pytest.raises(ValueError):
         assert_transition_allowed(JobState.COMPLETED_BY_PROVIDER, JobState.READY_FOR_USER)
+
+
+def test_artifact_bytes_verified_cannot_transition_directly_to_ready_for_user() -> None:
+    with pytest.raises(ValueError):
+        assert_transition_allowed(JobState.ARTIFACT_BYTES_VERIFIED, JobState.READY_FOR_USER)

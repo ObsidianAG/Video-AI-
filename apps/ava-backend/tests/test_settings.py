@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import os
+from typing import Any
 
 import pytest
 from pydantic import ValidationError
+from pydantic import SecretStr
 
 from app.settings import Settings
 
@@ -20,10 +22,10 @@ from app.settings import Settings
     ],
 )
 def test_missing_required_env_fails_closed(missing_key: str) -> None:
-    payload = {
-        "OPENAI_API_KEY": "k",
+    payload: dict[str, Any] = {
+        "OPENAI_API_KEY": SecretStr("k"),
         "OPENAI_MODEL": "gpt-5.5",
-        "AVA_API_KEY": "k2",
+        "AVA_API_KEY": SecretStr("k2"),
         "MIN_ARTIFACT_BYTES": 8,
         "MAX_ARTIFACT_BYTES": 16,
         "FFPROBE_PATH": "/bin/true",
@@ -40,15 +42,15 @@ def test_missing_required_env_fails_closed(missing_key: str) -> None:
         os.environ.pop(key, None)
 
     with pytest.raises(ValidationError):
-        Settings(**payload)
+        Settings.model_validate(payload)
 
 
 def test_invalid_numeric_bounds_fail_validation() -> None:
     with pytest.raises(ValidationError):
         Settings(
-            OPENAI_API_KEY="k",
+            OPENAI_API_KEY=SecretStr("k"),
             OPENAI_MODEL="gpt-5.5",
-            AVA_API_KEY="k2",
+            AVA_API_KEY=SecretStr("k2"),
             MIN_ARTIFACT_BYTES=100,
             MAX_ARTIFACT_BYTES=99,
             FFPROBE_PATH="/bin/true",
@@ -56,6 +58,11 @@ def test_invalid_numeric_bounds_fail_validation() -> None:
 
 
 def test_invalid_config_rejected() -> None:
+    os.environ["OPENAI_API_KEY"] = "k"
+    os.environ["OPENAI_MODEL"] = "gpt-5.5"
+    os.environ["AVA_API_KEY"] = "k2"
     os.environ["MIN_ARTIFACT_BYTES"] = "not-an-int"
+    os.environ["MAX_ARTIFACT_BYTES"] = "16"
+    os.environ["FFPROBE_PATH"] = "/bin/true"
     with pytest.raises(ValidationError):
-        Settings()
+        Settings()  # type: ignore[call-arg]

@@ -75,7 +75,7 @@ def test_openai_failure_returns_502_fail_closed() -> None:
 
 def test_malformed_output_path_returns_502() -> None:
     class MalformedService:
-        async def create_storyboard(self, request: StoryboardRequest) -> StoryboardPlan:  # type: ignore[override]
+        async def create_storyboard(self, request: StoryboardRequest) -> StoryboardPlan:
             raise ValueError("malformed")
 
     app = create_app()

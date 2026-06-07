@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.openai_service import OpenAIStoryboardService
+from app.openai_service import OpenAIServiceError, OpenAIStoryboardService
 from app.schemas import JobState, StoryboardRequest, StoryboardResponse
 from app.security import require_api_key
 from app.settings import Settings, get_settings
@@ -25,7 +25,7 @@ async def create_storyboard(
 ) -> StoryboardResponse:
     try:
         storyboard = await service.create_storyboard(request)
-    except Exception as exc:  # pragma: no cover
+    except OpenAIServiceError as exc:
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail="Storyboard generation failed closed.",
