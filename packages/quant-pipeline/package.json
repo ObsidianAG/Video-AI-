@@ -1,0 +1,16 @@
+{
+  "name": "@video-ai/quant-pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify:env":      "node scripts/verify-env.mjs",
+    "verify:secrets":  "node scripts/verify-secrets.mjs",
+    "verify:dataflow": "node scripts/verify-dataflow.mjs",
+    "verify:budget":   "node scripts/verify-budget.mjs",
+    "verify:all":      "node scripts/verify-all.mjs",
+    "syntax": "node --check scripts/verify-env.mjs && node --check scripts/verify-secrets.mjs && node --check scripts/verify-dataflow.mjs && node --check scripts/verify-budget.mjs && node --check scripts/compute-budget.mjs && node --check scripts/verify-all.mjs",
+    "test":      "node --test tests/regression.test.mjs",
+    "verify:ci": "npm run syntax && npm test && npm run verify:all"
+  }
+}

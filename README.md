@@ -18,6 +18,7 @@ storage, auth, queue runtime, or webhook integration is wired yet.
 | Worker app       | placeholder; refuses to start                            |
 | Web app          | renders "Not ready yet."                                 |
 | Proof runner     | landed                                                   |
+| quant-pipeline gates | landed — `packages/quant-pipeline` (`npm run verify:ci`) |
 
 A video is real **only after all 7 proof gates pass**. See
 `packages/core/src/proof/types.ts`.
@@ -31,6 +32,7 @@ apps/
 packages/
   core/        Typed contracts: providers, storage, queue, auth, metrics, proof, states
   db/          Postgres migrations + a small loader; no ORM bound
+  quant-pipeline/  Fail-closed npm verification harness (env, secrets, dataflow, budget)
 scripts/
   proof/       Proof runner (`pnpm proof`)
 ```

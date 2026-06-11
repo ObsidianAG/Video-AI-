@@ -1,0 +1,27 @@
+{
+  "_comment": "Declared model budget for the quant_pipeline. Keep in sync with actual usage; reviewed in every MR.",
+  "tasks": [
+    {
+      "id": "summarize_report",
+      "model": "gpt-4o-mini",
+      "max_tokens": 1000,
+      "estimated_calls_per_day": 100,
+      "risk_level": "low",
+      "_note": "Low-risk daily summary; no human-in-the-loop required"
+    },
+    {
+      "id": "generate_analysis",
+      "model": "gpt-4o",
+      "max_tokens": 4000,
+      "estimated_calls_per_day": 10,
+      "risk_level": "high",
+      "hitl": true,
+      "_note": "High-risk deep analysis; output held for human review before release"
+    }
+  ],
+  "budget": {
+    "daily_token_limit": 500000,
+    "monthly_cost_limit_usd": 100,
+    "_note": "Totals: 140 000 tokens/day, ~$8.63/month at 50/50 input-output mix"
+  }
+}

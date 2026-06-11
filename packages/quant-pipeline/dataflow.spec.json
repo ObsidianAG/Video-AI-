@@ -1,0 +1,30 @@
+{
+  "_comment": "Declared data-flow graph for the quant_pipeline. Keep in sync with production code; reviewed in every MR.",
+  "nodes": [
+    { "id": "user_query",     "type": "source",    "tainted": true,
+      "_note": "Raw user prompt — untrusted by definition" },
+    { "id": "db_rows",        "type": "source",    "tainted": true,
+      "_note": "DB reads may carry user-supplied content" },
+    { "id": "sanitize_query", "type": "transform", "guard": true, "clears_taint": true,
+      "_note": "Input validation + escaping for user_query" },
+    { "id": "validate_rows",  "type": "transform", "guard": true, "clears_taint": true,
+      "_note": "Schema validation + type-coercion for db_rows" },
+    { "id": "enrich",         "type": "transform",
+      "_note": "Adds context metadata; receives only clean data" },
+    { "id": "llm_draft",      "type": "sink", "sink_type": "llm",      "hitl": true,
+      "_note": "Output goes to human review queue before delivery" },
+    { "id": "db_write",       "type": "sink", "sink_type": "sql" },
+    { "id": "api_response",   "type": "sink", "sink_type": "http_out" },
+    { "id": "audit_log",      "type": "sink", "sink_type": "fs_write" }
+  ],
+  "edges": [
+    { "from": "user_query",     "to": "sanitize_query" },
+    { "from": "db_rows",        "to": "validate_rows" },
+    { "from": "sanitize_query", "to": "enrich" },
+    { "from": "validate_rows",  "to": "enrich" },
+    { "from": "enrich",         "to": "llm_draft" },
+    { "from": "enrich",         "to": "db_write" },
+    { "from": "enrich",         "to": "api_response" },
+    { "from": "enrich",         "to": "audit_log" }
+  ]
+}
