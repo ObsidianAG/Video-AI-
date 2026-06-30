@@ -161,6 +161,8 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@22.19.17)
 
+  packages/quant-pipeline: {}
+
 packages:
 
   '@alloc/quick-lru@5.2.0':
