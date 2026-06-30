@@ -8,6 +8,7 @@ SELECT … FOR UPDATE so concurrent workers are serialized inside the transactio
 These tests use a hand-rolled async mock that exercises the locking protocol
 without a real database.
 """
+
 from __future__ import annotations
 
 import uuid
@@ -89,9 +90,9 @@ async def test_advance_state_selects_for_update() -> None:
 
     # Verify the first fetchrow call used FOR UPDATE
     first_call_sql: str = conn.fetchrow.call_args_list[0][0][0]
-    assert "FOR UPDATE" in first_call_sql.upper(), (
-        "advance_state must lock the row with SELECT … FOR UPDATE to prevent concurrent races"
-    )
+    assert (
+        "FOR UPDATE" in first_call_sql.upper()
+    ), "advance_state must lock the row with SELECT … FOR UPDATE to prevent concurrent races"
 
 
 @pytest.mark.asyncio
@@ -134,9 +135,9 @@ async def test_advance_state_select_inside_transaction() -> None:
     )
 
     # transaction must be entered before any fetchrow is called
-    assert call_order[0] == "transaction_enter", (
-        "Transaction must be opened before the SELECT FOR UPDATE to ensure the lock is held"
-    )
+    assert (
+        call_order[0] == "transaction_enter"
+    ), "Transaction must be opened before the SELECT FOR UPDATE to ensure the lock is held"
 
 
 @pytest.mark.asyncio
