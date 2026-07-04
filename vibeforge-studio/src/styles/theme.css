@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Clash Display", "Instrument Sans", sans-serif;
+  --font-body: "Instrument Sans", ui-sans-serif, system-ui;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --ease-snap: cubic-bezier(.2, .8, .2, 1);
+}
+
+:root[data-theme="aurora"] {
+  --bg: #070b14; --surface: #0d1322; --line: rgba(148, 180, 255, .14);
+  --ink: #e8eefc; --muted: #8b96b4; --accent: #7df4ff; --accent-2: #ff6ad5;
+}
+:root[data-theme="daybreak"] {
+  --bg: #f8fafc; --surface: #ffffff; --line: rgba(0,0,0,.08);
+  --ink: #0f172a; --muted: #64748b; --accent: #0ea5e9; --accent-2: #a21caf;
+}
+:root[data-theme="synthwave"] {
+  --bg: #0f0723; --surface: #1a0f3a; --line: rgba(180,100,255,.18);
+  --ink: #f3e8ff; --muted: #a78bfa; --accent: #e879f9; --accent-2: #facc15;
+}
+:root[data-theme="terminal"] {
+  --bg: #0d0d0d; --surface: #1a1a1a; --line: rgba(0,255,65,.12);
+  --ink: #e0ffe0; --muted: #5ebc5e; --accent: #00ff41; --accent-2: #ffaa00;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-property: opacity !important;
+  }
+}

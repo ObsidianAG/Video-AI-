@@ -1,0 +1,10 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useStudioStore } from "../lib/store/studio";
+export function DiffView() {
+    const pendingDiff = useStudioStore((s) => s.pendingDiff);
+    const applyDiff = useStudioStore((s) => s.applyDiff);
+    const discardDiff = useStudioStore((s) => s.discardDiff);
+    if (!pendingDiff)
+        return null;
+    return (_jsx("div", { className: "fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm", children: _jsxs("div", { className: "w-[800px] max-h-[600px] rounded-[16px] bg-[var(--surface)] border border-[var(--line)] shadow-2xl overflow-hidden", children: [_jsxs("div", { className: "px-6 py-4 border-b border-[var(--line)]", children: [_jsx("h3", { className: "text-lg font-bold text-[var(--ink)]", children: "Review Changes" }), _jsx("p", { className: "text-sm text-[var(--muted)] mt-1", children: "Code will be replaced. Apply to continue or discard to keep current." })] }), _jsxs("div", { className: "grid grid-cols-2 gap-4 p-6 overflow-y-auto max-h-[400px]", children: [_jsxs("div", { children: [_jsx("div", { className: "text-xs font-medium text-[var(--muted)] mb-2", children: "BEFORE" }), _jsx("pre", { className: "text-xs bg-[var(--bg)] p-4 rounded-lg overflow-x-auto border border-[var(--line)] text-[var(--ink)]", children: pendingDiff.before })] }), _jsxs("div", { children: [_jsx("div", { className: "text-xs font-medium text-[var(--muted)] mb-2", children: "AFTER" }), _jsx("pre", { className: "text-xs bg-[var(--bg)] p-4 rounded-lg overflow-x-auto border border-[var(--line)] text-[var(--ink)]", children: pendingDiff.after })] })] }), _jsxs("div", { className: "px-6 py-4 border-t border-[var(--line)] flex items-center justify-end gap-3", children: [_jsx("button", { onClick: discardDiff, className: "px-4 py-2 rounded-lg border border-[var(--line)] text-[var(--ink)] hover:bg-[var(--line)] transition-colors", children: "Discard" }), _jsx("button", { onClick: applyDiff, className: "px-4 py-2 rounded-lg bg-[var(--accent)] text-[var(--bg)] font-medium hover:opacity-90 transition-opacity", children: "Apply" })] })] }) }));
+}

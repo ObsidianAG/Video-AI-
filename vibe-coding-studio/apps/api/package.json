@@ -1,0 +1,28 @@
+{
+  "name": "@vibe-coding-studio/api",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.0.8",
+    "@hono/zod-validator": "^0.8.0",
+    "@vibe-coding-studio/shared": "workspace:*",
+    "hono": "^4.6.14",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "eslint": "^9.17.0",
+    "tsx": "^4.23.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
+  }
+}

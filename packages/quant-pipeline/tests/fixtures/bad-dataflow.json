@@ -1,0 +1,11 @@
+{
+  "_comment": "INTENTIONALLY INVALID — used by regression tests and fault-injection CI job. Do not use as a real spec.",
+  "_violation": "user_query flows directly to llm_output with no sanitizing guard, AND the LLM sink lacks hitl:true.",
+  "nodes": [
+    { "id": "user_query", "type": "source", "tainted": true },
+    { "id": "llm_output", "type": "sink",   "sink_type": "llm" }
+  ],
+  "edges": [
+    { "from": "user_query", "to": "llm_output" }
+  ]
+}

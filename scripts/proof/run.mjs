@@ -313,6 +313,7 @@ const gates = [
   { id: 'install', kind: 'shell', cmd: PNPM, args: ['install', '--frozen-lockfile'] },
   { id: 'typecheck', kind: 'shell', cmd: PNPM, args: ['-r', 'run', 'typecheck'] },
   { id: 'test', kind: 'shell', cmd: PNPM, args: ['-r', 'run', 'test'] },
+  { id: 'audit_no_mocks', kind: 'shell', cmd: 'node', args: ['scripts/audit-no-mocks.mjs'] },
   { id: 'build', kind: 'shell', cmd: PNPM, args: ['-r', 'run', 'build'] },
   { id: 'secret_scan', kind: 'scan', fn: secretScan },
   { id: 'provider_boundary_scan', kind: 'scan', fn: providerBoundaryScan },

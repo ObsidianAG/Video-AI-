@@ -1,0 +1,33 @@
+{
+  "name": "@video-ai/anthropic-sdk",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./headers": "./src/headers.ts",
+    "./itpm": "./src/itpm.ts",
+    "./throttle": "./src/throttle.ts",
+    "./batches": "./src/batches.ts",
+    "./retry": "./src/retry.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "eslint src --max-warnings=0"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

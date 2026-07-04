@@ -1,9 +1,9 @@
 import type { queue } from '@video-ai/core';
 
 /**
- * Worker entrypoint placeholder. NO queue runtime is wired.
+ * Worker bootstrap guard. NO queue runtime is wired.
  *
- * To go from this placeholder to a real worker:
+ * To wire a real worker:
  *   1. Pick a queue runtime (BullMQ + Redis is the intended default).
  *   2. Implement `QueueRuntime` from @video-ai/core/queue.
  *   3. Implement handlers for each queue listed in `JOB_QUEUES`.

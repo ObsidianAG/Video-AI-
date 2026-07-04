@@ -1,0 +1,17 @@
+{
+  "_comment": "INTENTIONALLY INVALID — used by regression tests and fault-injection CI job. Do not use as a real spec.",
+  "_violation": "high-risk task has no hitl:true AND daily token usage (8 000 000) exceeds the 100 000 limit.",
+  "tasks": [
+    {
+      "id": "risky_task_no_hitl",
+      "model": "gpt-4o",
+      "max_tokens": 8000,
+      "estimated_calls_per_day": 1000,
+      "risk_level": "high"
+    }
+  ],
+  "budget": {
+    "daily_token_limit": 100000,
+    "monthly_cost_limit_usd": 50
+  }
+}

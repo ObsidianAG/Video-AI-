@@ -1,0 +1,143 @@
+e2e:
+total 20
+drwxrwxr-x  2 runner runner 4096 Jul  4 22:15 .
+drwxrwxr-x 11 runner runner 4096 Jul  4 22:41 ..
+-rw-rw-r--  1 runner runner 1256 Jul  4 22:25 landing.spec.ts
+-rw-rw-r--  1 runner runner 1378 Jul  4 22:38 palette.spec.ts
+-rw-rw-r--  1 runner runner 1631 Jul  4 22:36 studio.spec.ts
+
+server:
+total 12
+drwxrwxr-x  2 runner runner 4096 Jul  4 22:15 .
+drwxrwxr-x 11 runner runner 4096 Jul  4 22:41 ..
+-rw-rw-r--  1 runner runner 2704 Jul  4 22:15 index.mjs
+
+src:
+total 60
+drwxrwxr-x  7 runner runner 4096 Jul  4 22:31 .
+drwxrwxr-x 11 runner runner 4096 Jul  4 22:41 ..
+-rw-rw-r--  1 runner runner  418 Jul  4 22:31 App.js
+-rw-rw-r--  1 runner runner  358 Jul  4 22:15 App.tsx
+drwxrwxr-x  4 runner runner 4096 Jul  4 22:15 components
+drwxrwxr-x  4 runner runner 4096 Jul  4 22:15 lib
+-rw-rw-r--  1 runner runner  333 Jul  4 22:31 main.js
+-rw-rw-r--  1 runner runner  268 Jul  4 22:15 main.tsx
+drwxrwxr-x  2 runner runner 4096 Jul  4 22:31 pages
+-rw-rw-r--  1 runner runner  502 Jul  4 22:31 routes.js
+-rw-rw-r--  1 runner runner  428 Jul  4 22:15 routes.tsx
+drwxrwxr-x  2 runner runner 4096 Jul  4 22:31 studio
+drwxrwxr-x  2 runner runner 4096 Jul  4 22:15 styles
+-rw-rw-r--  1 runner runner   36 Jul  4 22:31 test.setup.js
+-rw-rw-r--  1 runner runner   36 Jul  4 22:15 test.setup.ts
+
+src/components:
+total 16
+drwxrwxr-x 4 runner runner 4096 Jul  4 22:15 .
+drwxrwxr-x 7 runner runner 4096 Jul  4 22:31 ..
+drwxrwxr-x 2 runner runner 4096 Jul  4 22:31 fx
+drwxrwxr-x 2 runner runner 4096 Jul  4 22:31 ui
+
+src/components/fx:
+total 56
+drwxrwxr-x 2 runner runner 4096 Jul  4 22:31 .
+drwxrwxr-x 4 runner runner 4096 Jul  4 22:15 ..
+-rw-rw-r-- 1 runner runner 2284 Jul  4 22:31 AuroraConductor.js
+-rw-rw-r-- 1 runner runner 2098 Jul  4 22:15 AuroraConductor.tsx
+-rw-rw-r-- 1 runner runner  744 Jul  4 22:31 BorderBeam.js
+-rw-rw-r-- 1 runner runner  770 Jul  4 22:15 BorderBeam.tsx
+-rw-rw-r-- 1 runner runner 1120 Jul  4 22:31 CursorGlow.js
+-rw-rw-r-- 1 runner runner 1059 Jul  4 22:15 CursorGlow.tsx
+-rw-rw-r-- 1 runner runner 1067 Jul  4 22:31 MagneticButton.js
+-rw-rw-r-- 1 runner runner 1115 Jul  4 22:15 MagneticButton.tsx
+-rw-rw-r-- 1 runner runner 1124 Jul  4 22:31 Marquee.js
+-rw-rw-r-- 1 runner runner 1119 Jul  4 22:15 Marquee.tsx
+-rw-rw-r-- 1 runner runner 1049 Jul  4 22:31 TiltCard.js
+-rw-rw-r-- 1 runner runner 1171 Jul  4 22:15 TiltCard.tsx
+
+src/components/ui:
+total 48
+drwxrwxr-x 2 runner runner 4096 Jul  4 22:31 .
+drwxrwxr-x 4 runner runner 4096 Jul  4 22:15 ..
+-rw-rw-r-- 1 runner runner 4572 Jul  4 22:31 CommandPalette.js
+-rw-rw-r-- 1 runner runner 4814 Jul  4 22:15 CommandPalette.tsx
+-rw-rw-r-- 1 runner runner  189 Jul  4 22:31 Skeleton.js
+-rw-rw-r-- 1 runner runner  162 Jul  4 22:15 Skeleton.tsx
+-rw-rw-r-- 1 runner runner  561 Jul  4 22:31 StatusChip.js
+-rw-rw-r-- 1 runner runner  527 Jul  4 22:15 StatusChip.tsx
+-rw-rw-r-- 1 runner runner 1530 Jul  4 22:31 Toast.js
+-rw-rw-r-- 1 runner runner 1772 Jul  4 22:15 Toast.tsx
+
+src/lib:
+total 16
+drwxrwxr-x 4 runner runner 4096 Jul  4 22:15 .
+drwxrwxr-x 7 runner runner 4096 Jul  4 22:31 ..
+drwxrwxr-x 2 runner runner 4096 Jul  4 22:31 ai
+drwxrwxr-x 2 runner runner 4096 Jul  4 22:31 store
+
+src/lib/ai:
+total 68
+drwxrwxr-x 2 runner runner 4096 Jul  4 22:31 .
+drwxrwxr-x 4 runner runner 4096 Jul  4 22:15 ..
+-rw-rw-r-- 1 runner runner 8956 Jul  4 22:31 demoFixtures.js
+-rw-rw-r-- 1 runner runner 9009 Jul  4 22:15 demoFixtures.ts
+-rw-rw-r-- 1 runner runner  557 Jul  4 22:31 srcdoc.js
+-rw-rw-r-- 1 runner runner 1959 Jul  4 22:31 srcdoc.test.js
+-rw-rw-r-- 1 runner runner 1869 Jul  4 22:15 srcdoc.test.ts
+-rw-rw-r-- 1 runner runner  603 Jul  4 22:15 srcdoc.ts
+-rw-rw-r-- 1 runner runner 1169 Jul  4 22:31 stream.js
+-rw-rw-r-- 1 runner runner 4583 Jul  4 22:31 stream.test.js
+-rw-rw-r-- 1 runner runner 3843 Jul  4 22:15 stream.test.ts
+-rw-rw-r-- 1 runner runner 1045 Jul  4 22:15 stream.ts
+
+src/lib/store:
+total 48
+drwxrwxr-x 2 runner runner 4096 Jul  4 22:31 .
+drwxrwxr-x 4 runner runner 4096 Jul  4 22:15 ..
+-rw-rw-r-- 1 runner runner 1391 Jul  4 22:31 studio.js
+-rw-rw-r-- 1 runner runner 5283 Jul  4 22:31 studio.test.js
+-rw-rw-r-- 1 runner runner 4977 Jul  4 22:15 studio.test.ts
+-rw-rw-r-- 1 runner runner 2039 Jul  4 22:15 studio.ts
+-rw-rw-r-- 1 runner runner  319 Jul  4 22:31 theme.js
+-rw-rw-r-- 1 runner runner 2403 Jul  4 22:31 theme.test.js
+-rw-rw-r-- 1 runner runner 2392 Jul  4 22:15 theme.test.ts
+-rw-rw-r-- 1 runner runner  470 Jul  4 22:15 theme.ts
+
+src/pages:
+total 24
+drwxrwxr-x 2 runner runner 4096 Jul  4 22:31 .
+drwxrwxr-x 7 runner runner 4096 Jul  4 22:31 ..
+-rw-rw-r-- 1 runner runner 7663 Jul  4 22:31 Landing.js
+-rw-rw-r-- 1 runner runner 8069 Jul  4 22:23 Landing.tsx
+
+src/studio:
+total 80
+drwxrwxr-x 2 runner runner 4096 Jul  4 22:31 .
+drwxrwxr-x 7 runner runner 4096 Jul  4 22:31 ..
+-rw-rw-r-- 1 runner runner 2145 Jul  4 22:31 DiffView.js
+-rw-rw-r-- 1 runner runner 2162 Jul  4 22:15 DiffView.tsx
+-rw-rw-r-- 1 runner runner 1003 Jul  4 22:31 EditorPane.js
+-rw-rw-r-- 1 runner runner 1041 Jul  4 22:15 EditorPane.tsx
+-rw-rw-r-- 1 runner runner 1707 Jul  4 22:31 HistoryRail.js
+-rw-rw-r-- 1 runner runner 1701 Jul  4 22:15 HistoryRail.tsx
+-rw-rw-r-- 1 runner runner  337 Jul  4 22:31 PreviewPane.js
+-rw-rw-r-- 1 runner runner  342 Jul  4 22:15 PreviewPane.tsx
+-rw-rw-r-- 1 runner runner 1394 Jul  4 22:31 StatusBar.js
+-rw-rw-r-- 1 runner runner 1306 Jul  4 22:15 StatusBar.tsx
+-rw-rw-r-- 1 runner runner 2818 Jul  4 22:31 Studio.js
+-rw-rw-r-- 1 runner runner 2829 Jul  4 22:15 Studio.tsx
+-rw-rw-r-- 1 runner runner 2200 Jul  4 22:31 TemplateGallery.js
+-rw-rw-r-- 1 runner runner 2308 Jul  4 22:15 TemplateGallery.tsx
+-rw-rw-r-- 1 runner runner 5137 Jul  4 22:31 VibePanel.js
+-rw-rw-r-- 1 runner runner 5268 Jul  4 22:15 VibePanel.tsx
+
+src/styles:
+total 12
+drwxrwxr-x 2 runner runner 4096 Jul  4 22:15 .
+drwxrwxr-x 7 runner runner 4096 Jul  4 22:31 ..
+-rw-rw-r-- 1 runner runner 1127 Jul  4 22:15 theme.css
+
+tools:
+total 12
+drwxrwxr-x  2 runner runner 4096 Jul  4 22:15 .
+drwxrwxr-x 11 runner runner 4096 Jul  4 22:41 ..
+-rw-rw-r--  1 runner runner  652 Jul  4 22:15 verify_no_secret_in_bundle.mjs

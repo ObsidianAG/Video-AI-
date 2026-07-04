@@ -1,0 +1,84 @@
+# .gitlab-ci.yml
+#
+# quant_pipeline verification gates.
+#
+# Two jobs run on every MR and every branch push:
+#
+#   verify_gates              — must be GREEN.  Proves the declared graph and
+#                               budget are safe on the current commit.
+#
+#   verify_gates_fault_inject — must also be GREEN.  Proves each gate is
+#                               fail-closed by asserting that known-bad inputs
+#                               are correctly rejected.  If a gate is broken
+#                               (lets bad input through), this job turns RED.
+#
+# To produce a deliberately RED verify_gates run: commit a file that contains
+# a hardcoded credential (e.g. an sk-* key) or a bad dataflow spec, then push.
+# The fault-injection job remains green because it tests rejection, not pass.
+# See packages/quant-pipeline/README.md for the full red-run procedure.
+
+stages:
+  - verify
+
+# ── Green gate ────────────────────────────────────────────────────────────────
+verify_gates:
+  stage: verify
+  image: node:22-slim
+  before_script:
+    - cd packages/quant-pipeline
+  script:
+    # syntax check + 12 regression tests + all four verification gates
+    - npm run verify:ci
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+
+# ── Fault-injection probe ─────────────────────────────────────────────────────
+# Every sub-step inverts its exit code: the probe FAILS (exit 1) if a gate
+# wrongly PASSES on bad input, and PASSES (exit 0) if the gate correctly
+# rejects bad input.  All four probes must succeed for this job to be green.
+verify_gates_fault_inject:
+  stage: verify
+  image: node:22-slim
+  before_script:
+    - cd packages/quant-pipeline
+  script:
+    # Probe 1 — AI enabled, credentials absent → gate must reject
+    - |
+      if AI_ENABLED=true AI_PROVIDER=openai node scripts/verify-env.mjs 2>/dev/null; then
+        echo "FAULT: verify:env accepted AI_ENABLED=true with no credentials"
+        exit 1
+      fi
+      echo "✓ Probe 1: missing credentials correctly rejected"
+
+    # Probe 2 — placeholder key → gate must reject
+    - |
+      if AI_ENABLED=true AI_PROVIDER=openai OPENAI_API_KEY=your-api-key \
+           node scripts/verify-env.mjs 2>/dev/null; then
+        echo "FAULT: verify:env accepted placeholder key"
+        exit 1
+      fi
+      echo "✓ Probe 2: placeholder key correctly rejected"
+
+    # Probe 3 — guard-bypass dataflow fixture → gate must reject
+    - |
+      if DATAFLOW_SPEC=tests/fixtures/bad-dataflow.json \
+           node scripts/verify-dataflow.mjs 2>/dev/null; then
+        echo "FAULT: verify:dataflow accepted an unguarded taint path"
+        exit 1
+      fi
+      echo "✓ Probe 3: guard-bypass dataflow correctly rejected"
+
+    # Probe 4 — high-risk budget task without HITL → gate must reject
+    - |
+      if BUDGET_SPEC=tests/fixtures/bad-budget.json \
+           node scripts/verify-budget.mjs 2>/dev/null; then
+        echo "FAULT: verify:budget accepted high-risk task without hitl:true"
+        exit 1
+      fi
+      echo "✓ Probe 4: high-risk task without HITL correctly rejected"
+
+    - echo "All fault-injection probes passed — gates are fail-closed ✓"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH

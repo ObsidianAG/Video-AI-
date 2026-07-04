@@ -36,3 +36,13 @@ yarn-error.log*
 
 # Proof runner artifacts
 /proof-output
+
+# Python / ava-backend
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+dist/
