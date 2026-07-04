@@ -41,7 +41,7 @@ async function generate(req, res) {
 function serveStatic(req, res) {
   const url = (req.url ?? "/").split("?")[0];
   let p = resolve(join(DIST, url === "/" ? "index.html" : url));
-  if (!p.startsWith(DIST)) { res.writeHead(403); res.end(); return; }
+  if (!p.startsWith(DIST + "/")) { res.writeHead(403); res.end(); return; }
   if (!existsSync(p) || statSync(p).isDirectory()) p = join(DIST, "index.html");
   res.writeHead(200, { "content-type": MIME[extname(p)] ?? "application/octet-stream",
     "content-security-policy": CSP });
