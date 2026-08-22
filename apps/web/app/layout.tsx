@@ -3,12 +3,12 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Video AI',
-  description: 'Production text-to-video platform',
+  description: 'Production text-to-video platform — Sora, VEO 3, Kling, and more.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body className="min-h-screen bg-background text-foreground antialiased">{children}</body>
     </html>
   );
