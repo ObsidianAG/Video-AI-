@@ -36,3 +36,7 @@ yarn-error.log*
 
 # Proof runner artifacts
 /proof-output
+
+# Python
+__pycache__/
+*.py[cod]
